@@ -7,7 +7,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import com.reacttive.aadilmirrani.mlslibrary.model.TagHeader
-import com.reacttive.aadilmirrani.mlslibrary.model.TagName
 
 internal fun LinearLayout.addHeaderTextView(@NonNull context: Context, @NonNull header: TagHeader, @NonNull txtColor: Int, @NonNull txtSize: Float, typeface: Typeface?): TextView {
     val textView = TextView(context)

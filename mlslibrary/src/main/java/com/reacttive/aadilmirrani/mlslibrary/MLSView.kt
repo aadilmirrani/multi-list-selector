@@ -6,15 +6,11 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import androidx.recyclerview.widget.RecyclerView
 import com.reacttive.aadilmirrani.mlslibrary.helper.AppData
 import com.reacttive.aadilmirrani.mlslibrary.helper.RecyclerData
 import com.reacttive.aadilmirrani.mlslibrary.helper.addHeaderTextView
@@ -65,9 +61,9 @@ class MLSView : LinearLayout {
     private var tagNormalCornerRadius: Float? = null
     private var tagSelectedCornerRadius: Float? = null
 
-    constructor(context: Context) : this(context, null) {}
+    constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, R.attr.mlsGroupStyle) {}
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, R.attr.mlsGroupStyle)
 
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
         this.orientation = LinearLayout.VERTICAL
