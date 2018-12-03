@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MLSView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="headerTextColor">@color/header_text_color</item>
+        <item name="headerTextSize">@dimen/header_text_size</item>
+
+        <item name="tagNormalTextSize">@dimen/tag_normal_text_size</item>
+        <item name="tagSelectedTextSize">@dimen/tag_selected_text_size</item>
+
+        <item name="tagNormalTextColor">@color/tag_normal_color</item>
+        <item name="tagSelectedTextColor">@color/tag_selected_color</item>
+        <item name="tagDisabledTextColor">@color/tag_disabled_color</item>
+    </style>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MLSView">
+        <attr name="headerTextColor" format="color"/>
+        <attr name="headerTextSize" format="dimension"/>
+        <attr name="headerTypeface" format="string"/>
+
+        <attr name="tagNormalTextSize" format="dimension"/>
+        <attr name="tagSelectedTextSize" format="dimension"/>
+
+        <attr name="tagTypeface" format="string"/>
+
+        <attr name="tagNormalTextColor" format="color"/>
+        <attr name="tagSelectedTextColor" format="color"/>
+        <attr name="tagDisabledTextColor" format="color"/>
+
+        <attr name="tagNormalStrokeWidth" format="dimension"/>
+        <attr name="tagSelectedStrokeWidth" format="dimension"/>
+
+        <attr name="tagNormalCornerRadius" format="dimension"/>
+        <attr name="tagSelectedCornerRadius" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="Themes">
+        <attr name="mlsGroupStyle" format="reference" />
+    </declare-styleable>
+<!--
+    <declare-styleable name="MLSTagNormal">
+    </declare-styleable>
+
+    <declare-styleable name="MLSTagSelected">
+    </declare-styleable>
+
+    <declare-styleable name="MLSTagDisabled">
+
+    </declare-styleable>
+    -->
+</resources>
