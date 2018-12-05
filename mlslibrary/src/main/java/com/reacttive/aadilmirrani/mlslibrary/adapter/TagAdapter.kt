@@ -1,5 +1,6 @@
 package com.reacttive.aadilmirrani.mlslibrary.adapter
 
+import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,7 @@ import com.reacttive.aadilmirrani.mlslibrary.utils.setTagDrawable
 import kotlin.math.roundToInt
 
 
-class TagAdapter internal constructor(@NonNull private val variant: Variant, @NonNull private val mlsTagStyle: MLSTagStyle) : RecyclerView.Adapter<TagAdapter.MyViewHolder>() {
+class TagAdapter internal constructor(@NonNull private val variant: Variant, @NonNull private val mlsTagStyle: MLSTagStyle, private val typeface: Typeface?) : RecyclerView.Adapter<TagAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.tv_it_tag)
@@ -33,6 +34,7 @@ class TagAdapter internal constructor(@NonNull private val variant: Variant, @No
             holder.title.setTagDrawable(mlsTagStyle.tagNormalColor, mlsTagStyle.tagNormalCornerRadius, mlsTagStyle.normalStrokeWidth.roundToInt())
             holder.title.setTextColor(mlsTagStyle.tagNormalColor)
             holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagNormalTextSize)
+            typeface?.let { tf ->holder.title.typeface =  tf }
         } ?: kotlin.run {
             if(RecyclerData.hideDisabled) {
                 holder.itemView.visibility = View.GONE
@@ -40,6 +42,7 @@ class TagAdapter internal constructor(@NonNull private val variant: Variant, @No
                 holder.title.setTagDrawable(mlsTagStyle.tagDisabledColor, mlsTagStyle.tagNormalCornerRadius, mlsTagStyle.normalStrokeWidth.roundToInt())
                 holder.title.setTextColor(mlsTagStyle.tagDisabledColor)
                 holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagNormalTextSize)
+                typeface?.let { tf ->holder.title.typeface =  tf }
             }
         }
 
@@ -48,6 +51,7 @@ class TagAdapter internal constructor(@NonNull private val variant: Variant, @No
                 holder.title.setTagDrawable(mlsTagStyle.tagSelectedColor, mlsTagStyle.tagSelectedCornerRadius, mlsTagStyle.selectedStrokeWidth.roundToInt())
                 holder.title.setTextColor(mlsTagStyle.tagSelectedColor)
                 holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagSelectedTextSize)
+                typeface?.let { tf ->holder.title.typeface =  tf }
             }
         }
         RecyclerData.listIndependentSelected[variant.title.key]?.let {
@@ -55,6 +59,7 @@ class TagAdapter internal constructor(@NonNull private val variant: Variant, @No
                 holder.title.setTagDrawable(mlsTagStyle.tagSelectedColor, mlsTagStyle.tagSelectedCornerRadius, mlsTagStyle.selectedStrokeWidth.roundToInt())
                 holder.title.setTextColor(mlsTagStyle.tagSelectedColor)
                 holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagSelectedTextSize)
+                typeface?.let { tf ->holder.title.typeface =  tf }
             }
         }
         holder.title.text = title

@@ -1,6 +1,7 @@
 package com.reacttive.aadilmirrani.mlslibrary.helper
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.NonNull
@@ -15,7 +16,7 @@ import com.reacttive.aadilmirrani.mlslibrary.listener.RecyclerTouchListener
 import com.reacttive.aadilmirrani.mlslibrary.model.MLSTagStyle
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
 
-internal fun LinearLayout.addRecyclerView(@NonNull context: Context, @NonNull mlsTagStyle: MLSTagStyle, clickListener: OnTagSelectListener?, @NonNull variant: Variant): RecyclerView {
+internal fun LinearLayout.addRecyclerView(@NonNull context: Context, @NonNull mlsTagStyle: MLSTagStyle, clickListener: OnTagSelectListener?, @NonNull variant: Variant, typeface: Typeface?): RecyclerView {
 
     val flexboxLayoutManager = FlexboxLayoutManager(context)
     flexboxLayoutManager.flexWrap = FlexWrap.WRAP
@@ -24,7 +25,7 @@ internal fun LinearLayout.addRecyclerView(@NonNull context: Context, @NonNull ml
 
     val recyclerView = RecyclerView(context)
 
-    val adapter = TagAdapter(variant, mlsTagStyle)
+    val adapter = TagAdapter(variant, mlsTagStyle, typeface)
 
     recyclerView.layoutManager = flexboxLayoutManager
     recyclerView.setHasFixedSize(true)

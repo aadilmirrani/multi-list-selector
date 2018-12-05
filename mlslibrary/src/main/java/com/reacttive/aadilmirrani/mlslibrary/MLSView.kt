@@ -96,7 +96,7 @@ class MLSView : LinearLayout {
 
     override fun onViewAdded(child: View?) {
         super.onViewAdded(child)
-
+/*
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(
             ObjectAnimator.ofFloat(this, "translationY", 100f,0f),
@@ -104,6 +104,7 @@ class MLSView : LinearLayout {
         )
         animatorSet.interpolator = DecelerateInterpolator(3.0f)
         animatorSet.duration = 300
+*/
     }
 
     fun clearData(){
@@ -129,6 +130,7 @@ class MLSView : LinearLayout {
             tagNormalCornerRadius?: defaultTagNormalCornerRadius,
             tagSelectedCornerRadius?: defaultTagSelectedCornerRadius)
 
+        clearData()
         RecyclerData.delimiter = delimiter
         RecyclerData.listVariant = listVariant
         RecyclerData.listValue = listValue
@@ -136,13 +138,17 @@ class MLSView : LinearLayout {
 
         for(variant in listVariant) {
             AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerTypeface))
-            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, AppData.mOnTagSelectListener, variant))
+            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, AppData.mOnTagSelectListener, variant, tagTypeface ?: defaultTagTypeface))
         }
         this.invalidate()
     }
 
     fun setOnTagSelectListener(l: OnTagSelectListener) {
         AppData.mOnTagSelectListener = l
+    }
+
+    fun setTypeface(@NonNull typeface: Typeface) {
+        tagTypeface = typeface
     }
 
     fun enableAll(@NonNull b: Boolean) {
