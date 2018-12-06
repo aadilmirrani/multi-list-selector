@@ -14,6 +14,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_add_values"/>
+
+    <Button
+            android:id="@+id/btn_add_values"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add Values"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_add_group"/>
+
+    <Button
+            android:id="@+id/btn_add_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add Group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

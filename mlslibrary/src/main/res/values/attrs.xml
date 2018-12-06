@@ -3,12 +3,9 @@
     <declare-styleable name="MLSView">
         <attr name="headerTextColor" format="color"/>
         <attr name="headerTextSize" format="dimension"/>
-        <attr name="headerTypeface" format="string"/>
 
         <attr name="tagNormalTextSize" format="dimension"/>
         <attr name="tagSelectedTextSize" format="dimension"/>
-
-        <attr name="tagTypeface" format="string"/>
 
         <attr name="tagNormalTextColor" format="color"/>
         <attr name="tagSelectedTextColor" format="color"/>

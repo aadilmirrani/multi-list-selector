@@ -1,16 +1,12 @@
 package com.reacttive.aadilmirrani.mlslibrary
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.reacttive.aadilmirrani.mlslibrary.helper.AppData
 import com.reacttive.aadilmirrani.mlslibrary.helper.RecyclerData
 import com.reacttive.aadilmirrani.mlslibrary.helper.addHeaderTextView
@@ -25,7 +21,6 @@ class MLSView : LinearLayout {
 
     private val defaultHeaderTextColor = ContextCompat.getColor(context, R.color.header_text_color)
     private val defaultHeaderTextSize = resources.getDimension(R.dimen.header_text_size)
-    private val defaultHeaderTypeface = ResourcesCompat.getFont(context, R.font.roboto_bold)
 
     private val defaultTagNormalColor = ContextCompat.getColor(context, R.color.tag_normal_color)
     private val defaultTagSelectedColor = ContextCompat.getColor(context, R.color.tag_selected_color)
@@ -33,8 +28,6 @@ class MLSView : LinearLayout {
 
     private val defaultTagNormalTextSize = resources.getDimension(R.dimen.tag_normal_text_size)
     private val defaultTagSelectedTextSize = resources.getDimension(R.dimen.tag_selected_text_size)
-
-    private val defaultTagTypeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
 
     private val defaultNormalStrokeWidth = resources.getDimension(R.dimen.tag_normal_stroke_width)
     private val defaultSelectedStrokeWidth = resources.getDimension(R.dimen.tag_selected_stroke_width)
@@ -44,7 +37,6 @@ class MLSView : LinearLayout {
 
     private var headerTextColor: Int? = null
     private var headerTextSize: Float? = null
-    private var headerTypeface: Typeface? = null
 
     private var tagNormalColor: Int? = null
     private var tagSelectedColor: Int? = null
@@ -53,13 +45,13 @@ class MLSView : LinearLayout {
     private var tagNormalTextSize: Float? = null
     private var tagSelectedTextSize: Float? = null
 
-    private var tagTypeface: Typeface? = null
-
     private var normalStrokeWidth: Float? = null
     private var selectedStrokeWidth: Float? = null
 
     private var tagNormalCornerRadius: Float? = null
     private var tagSelectedCornerRadius: Float? = null
+
+    private var mlsTagStyle: MLSTagStyle? = null
 
     constructor(context: Context) : this(context, null)
 
@@ -72,7 +64,6 @@ class MLSView : LinearLayout {
         try {
             headerTextColor = a.getColor(R.styleable.MLSView_headerTextColor, defaultHeaderTextColor)
             headerTextSize = a.getDimension(R.styleable.MLSView_headerTextSize, defaultHeaderTextSize)
-            headerTypeface = defaultHeaderTypeface
 
             tagNormalColor = a.getColor(R.styleable.MLSView_tagNormalTextColor, defaultTagNormalColor)
             tagSelectedColor = a.getColor(R.styleable.MLSView_tagSelectedTextColor, defaultTagSelectedColor)
@@ -81,13 +72,22 @@ class MLSView : LinearLayout {
             tagNormalTextSize = a.getDimension(R.styleable.MLSView_tagNormalTextSize, defaultTagNormalTextSize)
             tagSelectedTextSize = a.getDimension(R.styleable.MLSView_tagSelectedTextSize, defaultTagSelectedTextSize)
 
-            tagTypeface = defaultTagTypeface
-
             normalStrokeWidth = a.getDimension(R.styleable.MLSView_tagNormalStrokeWidth, defaultNormalStrokeWidth)
             selectedStrokeWidth = a.getDimension(R.styleable.MLSView_tagSelectedStrokeWidth, defaultSelectedStrokeWidth)
 
             tagNormalCornerRadius = a.getDimension(R.styleable.MLSView_tagNormalCornerRadius, defaultTagNormalCornerRadius)
             tagSelectedCornerRadius = a.getDimension(R.styleable.MLSView_tagSelectedCornerRadius, defaultTagSelectedCornerRadius)
+
+            mlsTagStyle = MLSTagStyle(
+                tagNormalColor?: defaultTagNormalColor,
+                tagSelectedColor?: defaultTagSelectedColor,
+                tagDisabledColor?: defaultTagDisabledColor,
+                tagNormalTextSize?: defaultTagNormalTextSize,
+                tagSelectedTextSize?: defaultTagSelectedTextSize,
+                normalStrokeWidth?: defaultNormalStrokeWidth,
+                selectedStrokeWidth?: defaultSelectedStrokeWidth,
+                tagNormalCornerRadius?: defaultTagNormalCornerRadius,
+                tagSelectedCornerRadius?: defaultTagSelectedCornerRadius)
 
         } finally {
             a.recycle()
@@ -107,48 +107,68 @@ class MLSView : LinearLayout {
 */
     }
 
-    fun clearData(){
+    private fun clearAll(){
         if(this.childCount > 0) {
             AppData.tvList.clear()
             AppData.rvList.clear()
             RecyclerData.delimiter = ""
             RecyclerData.listVariant.clear()
             RecyclerData.listValue.clear()
+            RecyclerData.listNormal.clear()
+            RecyclerData.listSelected.clear()
+            RecyclerData.listIndependentSelected.clear()
             this.removeAllViews()
         }
     }
 
     fun setData(@NonNull context: Context, @NonNull listVariant: ArrayList<Variant>, @NonNull listValue: HashMap<String, Int>, @NonNull delimiter: String) {
-        val mlsTagStyle = MLSTagStyle(
-            tagNormalColor?: defaultTagNormalColor,
-            tagSelectedColor?: defaultTagSelectedColor,
-            tagDisabledColor?: defaultTagDisabledColor,
-            tagNormalTextSize?: defaultTagNormalTextSize,
-            tagSelectedTextSize?: defaultTagSelectedTextSize,
-            normalStrokeWidth?: defaultNormalStrokeWidth,
-            selectedStrokeWidth?: defaultSelectedStrokeWidth,
-            tagNormalCornerRadius?: defaultTagNormalCornerRadius,
-            tagSelectedCornerRadius?: defaultTagSelectedCornerRadius)
 
-        clearData()
+        clearAll()
         RecyclerData.delimiter = delimiter
         RecyclerData.listVariant = listVariant
         RecyclerData.listValue = listValue
         RecyclerData.generateNormal()
 
         for(variant in listVariant) {
-            AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerTypeface))
-            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, AppData.mOnTagSelectListener, variant, tagTypeface ?: defaultTagTypeface))
+            AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize))
+            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant))
         }
         this.invalidate()
+    }
+
+    fun addIndependentGroup(variant: Variant) {
+        if(variant.title.independent) {
+            RecyclerData.listVariant.add(variant)
+            AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize))
+            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant))
+            RecyclerData.addIndependentGroup(variant)
+            AppData.notifyDataSetChanged()
+        }
+    }
+
+    fun updateValues(@NonNull listValue: HashMap<String, Int>) {
+        RecyclerData.listValue = listValue
+        RecyclerData.generateUpdatedValues()
+        AppData.notifyDataSetChanged()
+
     }
 
     fun setOnTagSelectListener(l: OnTagSelectListener) {
         AppData.mOnTagSelectListener = l
     }
 
-    fun setTypeface(@NonNull typeface: Typeface) {
-        tagTypeface = typeface
+    fun setHeaderTypeface(typeface: Typeface?) {
+        typeface?.let { tf ->
+            AppData.headerTypeface = tf
+            AppData.tvList.forEach { it.typeface = tf }
+        }
+    }
+
+    fun setTagTypeface(typeface: Typeface?) {
+        typeface?.let { tf ->
+            AppData.tagTypeface = tf
+            AppData.notifyDataSetChanged()
+        }
     }
 
     fun enableAll(@NonNull b: Boolean) {
@@ -170,7 +190,7 @@ class MLSView : LinearLayout {
         )
     )
     fun hideDisabledTag(@NonNull b: Boolean) {
-        RecyclerData.hideDisabled = b
+//        RecyclerData.hideDisabled = b
     }
 /*
     private fun Float.dp2px(): Float {

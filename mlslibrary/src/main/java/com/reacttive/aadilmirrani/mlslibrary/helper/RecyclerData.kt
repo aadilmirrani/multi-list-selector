@@ -13,10 +13,9 @@ object RecyclerData {
     internal var listValue = hashMapOf<String, Int>()
     internal var enableAll: Boolean = false
     internal var preSelected: Boolean = false
-    internal var hideDisabled: Boolean = false
 
     internal fun generateNormal() {
-        if(delimiter.isNotEmpty() && listVariant.size > 0 && listValue.size > 0) {
+        if(delimiter.isNotEmpty() && listVariant.size > 0/* && listValue.size > 0*/) {
 
             addIndependent()
 
@@ -47,6 +46,59 @@ object RecyclerData {
                 if(preSelected) generatePerSelected()
             }
         }
+    }
+
+    fun generateUpdatedValues() {
+        if(delimiter.isNotEmpty() && listVariant.size > 0 && listValue.size > 0) {
+            if(!enableAll) {
+
+                var clearRest = false
+                var key = ""
+                listVariant.forEach { variant ->
+                    if(clearRest) {
+                        if(!variant.title.independent) {
+                            listNormal.remove(variant.title.key)
+                            listSelected.remove(variant.title.key)
+                        }
+                    } else {
+                        val hashMap = linkedMapOf<String, Int>()
+                        variant.data.forEach { tag ->
+                            listValue.filter { it.key.contains(key) }.forEach { value ->
+                                if(value.key.contains(tag.key)) {
+                                    hashMap[tag.key] = 1
+                                }
+                            }
+                            if(hashMap.size > 0) listNormal[variant.title.key] = hashMap
+                        }
+
+                        listSelected[variant.title.key]?.let { select ->
+                            listNormal[variant.title.key]?.get(select)?.let {
+                                key = if(key.isEmpty()) select else "$key+$select"
+                            } ?: kotlin.run {
+                                listSelected.remove(variant.title.key)
+                                clearRest = true
+                            }
+                        } ?: kotlin.run {
+                            clearRest = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun addIndependentGroup(variant: Variant) {
+        val hashMap = linkedMapOf<String, Int>()
+        var pre = false
+        variant.data.forEach { tag ->
+            if(tag.selected) {
+                pre = true
+                listIndependentSelected[variant.title.key] = tag.key
+            }
+            hashMap[tag.key] = 1
+        }
+        listNormal[variant.title.key] = hashMap
+        if(preSelected && !pre) listIndependentSelected[variant.title.key] = variant.data[0].key
     }
 
     private fun addIndependent() {
@@ -183,7 +235,7 @@ object RecyclerData {
         }
     }
 
-    private fun getPQKey(): String {
+    internal fun getPQKey(): String {
         var key = ""
         for(item in listSelected)
             key += item.value + delimiter
