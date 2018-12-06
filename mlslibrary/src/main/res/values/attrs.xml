@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MLSView">
+        <attr name="groupBottomPadding" format="dimension"/>
+
         <attr name="headerTextColor" format="color"/>
         <attr name="headerTextSize" format="dimension"/>
 

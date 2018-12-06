@@ -19,6 +19,8 @@ import java.util.*
 
 class MLSView : LinearLayout {
 
+    private val defaultGroupBottomPadding = resources.getDimension(R.dimen.groupBottomPadding)
+
     private val defaultHeaderTextColor = ContextCompat.getColor(context, R.color.header_text_color)
     private val defaultHeaderTextSize = resources.getDimension(R.dimen.header_text_size)
 
@@ -34,6 +36,8 @@ class MLSView : LinearLayout {
 
     private val defaultTagNormalCornerRadius = resources.getDimension(R.dimen.tag_normal_corner_radius)
     private val defaultTagSelectedCornerRadius = resources.getDimension(R.dimen.tag_selected_corner_radius)
+
+    private var groupBotomPadding: Float? = null
 
     private var headerTextColor: Int? = null
     private var headerTextSize: Float? = null
@@ -62,6 +66,8 @@ class MLSView : LinearLayout {
 
         val a = context.obtainStyledAttributes(attrs, R.styleable.MLSView, defStyle, R.style.MLSView)
         try {
+            groupBotomPadding = a.getDimension(R.styleable.MLSView_groupBottomPadding, defaultGroupBottomPadding)
+
             headerTextColor = a.getColor(R.styleable.MLSView_headerTextColor, defaultHeaderTextColor)
             headerTextSize = a.getDimension(R.styleable.MLSView_headerTextSize, defaultHeaderTextSize)
 
@@ -131,7 +137,7 @@ class MLSView : LinearLayout {
 
         for(variant in listVariant) {
             AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize))
-            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant))
+            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding))
         }
         this.invalidate()
     }
@@ -140,7 +146,7 @@ class MLSView : LinearLayout {
         if(variant.title.independent) {
             RecyclerData.listVariant.add(variant)
             AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize))
-            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant))
+            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding))
             RecyclerData.addIndependentGroup(variant)
             AppData.notifyDataSetChanged()
         }

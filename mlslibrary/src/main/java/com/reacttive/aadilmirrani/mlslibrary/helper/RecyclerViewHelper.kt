@@ -13,8 +13,14 @@ import com.reacttive.aadilmirrani.mlslibrary.adapter.TagAdapter
 import com.reacttive.aadilmirrani.mlslibrary.listener.RecyclerTouchListener
 import com.reacttive.aadilmirrani.mlslibrary.model.MLSTagStyle
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
+import android.util.TypedValue
 
-internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle: MLSTagStyle?, @NonNull variant: Variant): RecyclerView {
+
+
+internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle: MLSTagStyle?, @NonNull variant: Variant, @NonNull groupBottomPadding: Float): RecyclerView {
+
+    val paddingPx =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, groupBottomPadding, context.resources.displayMetrics).toInt()
 
     val flexboxLayoutManager = FlexboxLayoutManager(context)
     flexboxLayoutManager.flexWrap = FlexWrap.WRAP
@@ -27,6 +33,7 @@ internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle
 
     recyclerView.layoutManager = flexboxLayoutManager
     recyclerView.setHasFixedSize(true)
+    recyclerView.setPadding(0, 0, 0, paddingPx)
     recyclerView.adapter = adapter
 
     recyclerView.addOnItemTouchListener( RecyclerTouchListener(context, recyclerView,
