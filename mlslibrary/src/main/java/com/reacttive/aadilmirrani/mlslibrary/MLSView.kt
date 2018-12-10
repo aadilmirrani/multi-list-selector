@@ -113,7 +113,7 @@ class MLSView : LinearLayout {
 */
     }
 
-    private fun clearAll(){
+    fun clearAll() {
         if(this.childCount > 0) {
             AppData.tvList.clear()
             AppData.rvList.clear()
