@@ -56,7 +56,9 @@ class MainActivity : AppCompatActivity(), OnTagSelectListener {
                 }
             }
 
-            recycler_view.updateValues(mapValue2)
+            if(recycler_view.updateValues(mapValue2)) {
+                Toast.makeText(this, "Values Updated", Toast.LENGTH_SHORT).show()
+            }
 
         }
 

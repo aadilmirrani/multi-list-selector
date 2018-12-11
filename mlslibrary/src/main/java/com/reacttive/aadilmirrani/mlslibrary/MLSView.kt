@@ -127,6 +127,13 @@ class MLSView : LinearLayout {
         }
     }
 
+    private fun clearValues() {
+        RecyclerData.listValue.clear()
+        RecyclerData.listNormal.clear()
+        RecyclerData.listSelected.clear()
+        RecyclerData.listIndependentSelected.clear()
+    }
+
     fun setData(@NonNull context: Context, @NonNull listVariant: ArrayList<Variant>, @NonNull listValue: HashMap<String, Int>, @NonNull delimiter: String) {
 
         clearAll()
@@ -153,10 +160,15 @@ class MLSView : LinearLayout {
     }
 
     fun updateValues(@NonNull listValue: HashMap<String, Int>) : Boolean {
-        RecyclerData.listValue = listValue
-        RecyclerData.generateUpdatedValues()
-        AppData.notifyDataSetChanged()
-        return RecyclerData.listNormal.size > 0
+        return if(listValue.size > 0) {
+            clearValues()
+            RecyclerData.listValue = listValue
+            RecyclerData.generateUpdatedValues()
+            AppData.notifyDataSetChanged()
+            RecyclerData.listNormal.size > 0
+        } else {
+            false
+        }
     }
 
     fun setOnTagSelectListener(l: OnTagSelectListener) {
