@@ -152,11 +152,11 @@ class MLSView : LinearLayout {
         }
     }
 
-    fun updateValues(@NonNull listValue: HashMap<String, Int>) {
+    fun updateValues(@NonNull listValue: HashMap<String, Int>) : Boolean {
         RecyclerData.listValue = listValue
         RecyclerData.generateUpdatedValues()
         AppData.notifyDataSetChanged()
-
+        return RecyclerData.listNormal.size > 0
     }
 
     fun setOnTagSelectListener(l: OnTagSelectListener) {
