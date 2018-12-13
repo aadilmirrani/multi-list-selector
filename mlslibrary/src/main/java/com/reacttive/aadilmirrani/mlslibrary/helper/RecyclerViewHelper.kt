@@ -43,7 +43,7 @@ internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle
 //                    if(!RecyclerData.enableAll) RecyclerData.updateNormalList(variant.title.key)
                     RecyclerData.updateData(variant, variant.data[position].key)
                     AppData.notifyDataSetChanged()
-                    AppData.mOnTagSelectListener?.onTagSelect(position, RecyclerData.getPQKey(), variant.title, variant.data[position], RecyclerData.listIndependentSelected)
+                    AppData.mOnTagSelectListener?.onTagSelect(position, RecyclerData.getPQKey(), RecyclerData.isSelected(), variant.title, variant.data[position], RecyclerData.listIndependentSelected)
                 }
             }
             override fun onLongClick(view: View?, position: Int) {}

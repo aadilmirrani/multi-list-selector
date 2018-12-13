@@ -1,6 +1,9 @@
 package com.reacttive.aadilmirrani.mlslibrary.helper
 
+import android.util.Log
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
+
+
 
 object RecyclerData {
 
@@ -8,14 +11,14 @@ object RecyclerData {
     internal val listSelected = linkedMapOf<String, String>()
     internal val listIndependentSelected = linkedMapOf<String, String>()
 
-    internal var delimiter: String = ""
+    internal var delimiter: Char = '+'
     internal var listVariant = arrayListOf<Variant>()
     internal var listValue = hashMapOf<String, Int>()
     internal var enableAll: Boolean = false
     internal var preSelected: Boolean = false
 
     internal fun generateNormal() {
-        if(delimiter.isNotEmpty() && listVariant.size > 0/* && listValue.size > 0*/) {
+        if(/*delimiter.isNotEmpty() && */listVariant.size > 0/* && listValue.size > 0*/) {
 
             addIndependent()
 
@@ -49,9 +52,18 @@ object RecyclerData {
     }
 
     fun generateUpdatedValues() {
-        if(delimiter.isNotEmpty() && listVariant.size > 0 && listValue.size > 0) {
-            if(!enableAll) {
+        if(/*delimiter.isNotEmpty() && */listVariant.size > 0 && listValue.size > 0) {
+            listVariant.forEach { variant ->
+                if(!variant.title.independent)
+                    return@forEach
+                val hashMap = linkedMapOf<String, Int>()
+                variant.data.forEach { tag ->
+                    hashMap[tag.key] = 1
+                }
+                listNormal[variant.title.key] = hashMap
+            }
 
+            if(!enableAll) {
                 var clearRest = false
                 var key = ""
                 listVariant.forEach { variant ->
@@ -84,6 +96,7 @@ object RecyclerData {
                     }
                 }
             }
+//            if(preSelected) generatePerSelected()
         }
     }
 
@@ -240,5 +253,11 @@ object RecyclerData {
         for(item in listSelected)
             key += item.value + delimiter
         return if(key.isNotEmpty()) key.substring(0, key.length - 1) else key
+    }
+
+    internal fun isSelected(): Boolean {
+        val groupSize = listVariant.filter { !it.title.independent }.size
+        val delimiterCount = getPQKey().split("+").size
+        return groupSize == delimiterCount
     }
 }

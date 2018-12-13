@@ -1,6 +1,7 @@
 package com.reacttive.aadilmirrani.multilistselector
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.reacttive.aadilmirrani.mlslibrary.listener.OnTagSelectListener
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), OnTagSelectListener {
         mapValue["a1+b1"] = 10
         mapValue["a1+b2"] = 10
 
-        recycler_view.setData(this, listVariant, mapValue, "+")
+        recycler_view.setData(this, listVariant, mapValue, '+')
         recycler_view.setOnTagSelectListener(this)
 
         btn_add_values.setOnClickListener {
@@ -68,7 +69,5 @@ class MainActivity : AppCompatActivity(), OnTagSelectListener {
 
     }
 
-    override fun onTagSelect(index: Int, key: String, group: TagHeader, tag: TagName, mapIndependent: LinkedHashMap<String, String>) {
-        Toast.makeText(this, "2233 \n$index\n$key\n$group\n$tag\n$mapIndependent", Toast.LENGTH_SHORT).show()
-    }
+    override fun onTagSelect(index: Int, key: String, selected: Boolean, group: TagHeader, tag: TagName, mapIndependent: LinkedHashMap<String, String>) {}
 }

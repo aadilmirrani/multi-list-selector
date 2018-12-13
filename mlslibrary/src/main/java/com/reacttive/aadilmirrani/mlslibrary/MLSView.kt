@@ -117,7 +117,7 @@ class MLSView : LinearLayout {
         if(this.childCount > 0) {
             AppData.tvList.clear()
             AppData.rvList.clear()
-            RecyclerData.delimiter = ""
+            RecyclerData.delimiter = '0'
             RecyclerData.listVariant.clear()
             RecyclerData.listValue.clear()
             RecyclerData.listNormal.clear()
@@ -130,11 +130,11 @@ class MLSView : LinearLayout {
     private fun clearValues() {
         RecyclerData.listValue.clear()
         RecyclerData.listNormal.clear()
-        RecyclerData.listSelected.clear()
-        RecyclerData.listIndependentSelected.clear()
+//        RecyclerData.listSelected.clear()
+//        RecyclerData.listIndependentSelected.clear()
     }
 
-    fun setData(@NonNull context: Context, @NonNull listVariant: ArrayList<Variant>, @NonNull listValue: HashMap<String, Int>, @NonNull delimiter: String) {
+    fun setData(@NonNull context: Context, @NonNull listVariant: ArrayList<Variant>, @NonNull listValue: HashMap<String, Int>, @NonNull delimiter: Char) {
 
         clearAll()
         RecyclerData.delimiter = delimiter
@@ -160,6 +160,10 @@ class MLSView : LinearLayout {
     }
 
     fun updateValues(@NonNull listValue: HashMap<String, Int>) : Boolean {
+        if(RecyclerData.enableAll) {
+            AppData.notifyDataSetChanged()
+            return true
+        }
         return if(listValue.size > 0) {
             clearValues()
             RecyclerData.listValue = listValue
