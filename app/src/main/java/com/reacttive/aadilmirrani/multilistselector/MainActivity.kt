@@ -1,7 +1,6 @@
 package com.reacttive.aadilmirrani.multilistselector
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.reacttive.aadilmirrani.mlslibrary.listener.OnTagSelectListener
@@ -17,6 +16,7 @@ class MainActivity : AppCompatActivity(), OnTagSelectListener {
         setContentView(R.layout.activity_main)
 
         var value = 1
+        var counter = 0
 
         val listVariant = arrayListOf<Variant>()
         listVariant.add(Variant(TagHeader("A", "Color"), arrayListOf(TagName("a1", "Alpha"), TagName("a2", "Beta"), TagName("a3", "Gamma"))))
@@ -64,7 +64,8 @@ class MainActivity : AppCompatActivity(), OnTagSelectListener {
         }
 
         btn_add_group.setOnClickListener {
-            recycler_view.addIndependentGroup(Variant(TagHeader("C", "Home", true), arrayListOf(TagName("c1", "Cup"), TagName("c2", "Light"), TagName("c3", "Table"))))
+            counter++
+            recycler_view.addIndependentGroup( Variant(TagHeader("C", "Home", true), arrayListOf(TagName("c1", "Cup $counter"), TagName("c2", "Light"), TagName("c3", "Table"))))
         }
 
     }

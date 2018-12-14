@@ -15,6 +15,7 @@ import com.reacttive.aadilmirrani.mlslibrary.listener.OnTagSelectListener
 import com.reacttive.aadilmirrani.mlslibrary.model.MLSTagStyle
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
 import java.util.*
+import kotlin.collections.LinkedHashMap
 
 
 class MLSView : LinearLayout {
@@ -138,22 +139,30 @@ class MLSView : LinearLayout {
 
         clearAll()
         RecyclerData.delimiter = delimiter
-        RecyclerData.listVariant = listVariant
+        RecyclerData.listVariant = listVariant.associateByTo(RecyclerData.listVariant, {it.title.key}, {it} )
         RecyclerData.listValue = listValue
         RecyclerData.generateNormal()
 
         for(variant in listVariant) {
-            AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize))
-            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding))
+            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize)
+            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding)
         }
         this.invalidate()
     }
 
     fun addIndependentGroup(variant: Variant) {
         if(variant.title.independent) {
-            RecyclerData.listVariant.add(variant)
-            AppData.tvList.add(this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize))
-            AppData.rvList.add(this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding))
+            if(RecyclerData.listVariant.containsKey(variant.title.key)) {
+                this.removeView(AppData.tvList[variant.title.key])
+                this.removeView(AppData.rvList[variant.title.key])
+
+                AppData.tvList.remove(variant.title.key)
+                AppData.tvList.remove(variant.title.key)
+            }
+
+            RecyclerData.listVariant[variant.title.key] = variant
+            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize)
+            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding)
             RecyclerData.addIndependentGroup(variant)
             AppData.notifyDataSetChanged()
         }
@@ -182,7 +191,7 @@ class MLSView : LinearLayout {
     fun setHeaderTypeface(typeface: Typeface?) {
         typeface?.let { tf ->
             AppData.headerTypeface = tf
-            AppData.tvList.forEach { it.typeface = tf }
+            AppData.tvList.forEach { it.value.typeface = tf }
         }
     }
 

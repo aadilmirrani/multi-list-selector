@@ -7,8 +7,8 @@ import com.reacttive.aadilmirrani.mlslibrary.listener.OnTagSelectListener
 
 object AppData {
 
-    internal val tvList = arrayListOf<TextView>()
-    internal val rvList = arrayListOf<RecyclerView>()
+    internal val tvList = hashMapOf<String, TextView>()
+    internal val rvList = hashMapOf<String, RecyclerView>()
 
     internal var mOnTagSelectListener: OnTagSelectListener? = null
 
@@ -16,6 +16,6 @@ object AppData {
     internal var tagTypeface: Typeface? = null
 
     fun notifyDataSetChanged() {
-        rvList.forEach { it.adapter?.notifyDataSetChanged() }
+        rvList.forEach { it.value.adapter?.notifyDataSetChanged() }
     }
 }

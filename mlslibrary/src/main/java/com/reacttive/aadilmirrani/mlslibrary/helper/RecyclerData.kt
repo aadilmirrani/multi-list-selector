@@ -1,6 +1,5 @@
 package com.reacttive.aadilmirrani.mlslibrary.helper
 
-import android.util.Log
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
 
 
@@ -12,7 +11,7 @@ object RecyclerData {
     internal val listIndependentSelected = linkedMapOf<String, String>()
 
     internal var delimiter: Char = '+'
-    internal var listVariant = arrayListOf<Variant>()
+    internal var listVariant = linkedMapOf<String, Variant>()
     internal var listValue = hashMapOf<String, Int>()
     internal var enableAll: Boolean = false
     internal var preSelected: Boolean = false
@@ -26,25 +25,25 @@ object RecyclerData {
                 listVariant.forEach { variant ->
                     val hashMap = linkedMapOf<String, Int>()
                     var pre = false
-                    variant.data.forEach { tag ->
+                    variant.value.data.forEach { tag ->
                         if(tag.selected) {
                             pre = true
-                            if(preSelected && !variant.title.independent) listSelected[variant.title.key] = tag.key
+                            if(preSelected && !variant.value.title.independent) listSelected[variant.value.title.key] = tag.key
                         }
                         hashMap[tag.key] = 1
                     }
-                    listNormal[variant.title.key] = hashMap
-                    if(preSelected && !pre && !variant.title.independent) listSelected[variant.title.key] = variant.data[0].key
+                    listNormal[variant.value.title.key] = hashMap
+                    if(preSelected && !pre && !variant.value.title.independent) listSelected[variant.value.title.key] = variant.value.data[0].key
                 }
             } else {
                 val hashMap = linkedMapOf<String, Int>()
-                listVariant[0].data.forEach { tag ->
+                listVariant.entries.first().value.data.forEach { tag ->
                     listValue.forEach { value ->
                         if(value.key.contains(tag.key)) {
                             hashMap[tag.key] = 1
                         }
                     }
-                    if(hashMap.size > 0) listNormal[listVariant[0].title.key] = hashMap
+                    if(hashMap.size > 0) listNormal[listVariant.entries.first().value.title.key] = hashMap
                 }
                 if(preSelected) generatePerSelected()
             }
@@ -54,13 +53,13 @@ object RecyclerData {
     fun generateUpdatedValues() {
         if(/*delimiter.isNotEmpty() && */listVariant.size > 0 && listValue.size > 0) {
             listVariant.forEach { variant ->
-                if(!variant.title.independent)
+                if(!variant.value.title.independent)
                     return@forEach
                 val hashMap = linkedMapOf<String, Int>()
-                variant.data.forEach { tag ->
+                variant.value.data.forEach { tag ->
                     hashMap[tag.key] = 1
                 }
-                listNormal[variant.title.key] = hashMap
+                listNormal[variant.value.title.key] = hashMap
             }
 
             if(!enableAll) {
@@ -68,26 +67,26 @@ object RecyclerData {
                 var key = ""
                 listVariant.forEach { variant ->
                     if(clearRest) {
-                        if(!variant.title.independent) {
-                            listNormal.remove(variant.title.key)
-                            listSelected.remove(variant.title.key)
+                        if(!variant.value.title.independent) {
+                            listNormal.remove(variant.value.title.key)
+                            listSelected.remove(variant.value.title.key)
                         }
                     } else {
                         val hashMap = linkedMapOf<String, Int>()
-                        variant.data.forEach { tag ->
+                        variant.value.data.forEach { tag ->
                             listValue.filter { it.key.contains(key) }.forEach { value ->
                                 if(value.key.contains(tag.key)) {
                                     hashMap[tag.key] = 1
                                 }
                             }
-                            if(hashMap.size > 0) listNormal[variant.title.key] = hashMap
+                            if(hashMap.size > 0) listNormal[variant.value.title.key] = hashMap
                         }
 
-                        listSelected[variant.title.key]?.let { select ->
-                            listNormal[variant.title.key]?.get(select)?.let {
+                        listSelected[variant.value.title.key]?.let { select ->
+                            listNormal[variant.value.title.key]?.get(select)?.let {
                                 key = if(key.isEmpty()) select else "$key+$select"
                             } ?: kotlin.run {
-                                listSelected.remove(variant.title.key)
+                                listSelected.remove(variant.value.title.key)
                                 clearRest = true
                             }
                         } ?: kotlin.run {
@@ -116,43 +115,43 @@ object RecyclerData {
 
     private fun addIndependent() {
         listVariant.forEach { variant ->
-            if(!variant.title.independent)
+            if(!variant.value.title.independent)
                 return@forEach
             val hashMap = linkedMapOf<String, Int>()
             var pre = false
-            variant.data.forEach { tag ->
+            variant.value.data.forEach { tag ->
                 if(tag.selected) {
                     pre = true
-                    listIndependentSelected[variant.title.key] = tag.key
+                    listIndependentSelected[variant.value.title.key] = tag.key
                 }
                 hashMap[tag.key] = 1
             }
-            listNormal[variant.title.key] = hashMap
-            if(preSelected && !pre) listIndependentSelected[variant.title.key] = variant.data[0].key
+            listNormal[variant.value.title.key] = hashMap
+            if(preSelected && !pre) listIndependentSelected[variant.value.title.key] = variant.value.data[0].key
         }
     }
 
     private fun generatePerSelected() {
         listVariant.forEach { variant ->
-            if(variant.title.independent)
+            if(variant.value.title.independent)
                 return@forEach
             var pre = false
-            variant.data.forEach { tag ->
+            variant.value.data.forEach { tag ->
                 if(tag.selected) {
-                    listNormal[variant.title.key]?.get(tag.key)?.let {
+                    listNormal[variant.value.title.key]?.get(tag.key)?.let {
 //                        RecyclerData.updateSelectedData(variant.title.key, tag.key)
 //                        RecyclerData.updateNormalList(variant.title.key)
-                        updateData(variant, tag.key)
+                        updateData(variant.value, tag.key)
                         pre = true
                     }
                 }
             }
             if(!pre) {
-                listNormal[variant.title.key]?.entries?.first()?.let { tag ->
-                    listNormal[variant.title.key]?.get(tag.key)?.let {
+                listNormal[variant.value.title.key]?.entries?.first()?.let { tag ->
+                    listNormal[variant.value.title.key]?.get(tag.key)?.let {
 //                        RecyclerData.updateSelectedData(variant.title.key, tag.key)
 //                        RecyclerData.updateNormalList(variant.title.key)
-                        updateData(variant, tag.key)
+                        updateData(variant.value, tag.key)
                     }
                 }
             }
@@ -164,7 +163,7 @@ object RecyclerData {
         if(group.title.independent) listIndependentSelected[group.title.key] = item
         else {
             listSelected[group.title.key] = item
-            listVariant.forEachIndexed { index, variant ->
+            listVariant.values.forEachIndexed { index, variant ->
                 if(variant.title.key == group.title.key) {
                     if(!enableAll) {
                         updateSelectedFrom(index)
@@ -186,7 +185,7 @@ object RecyclerData {
     }
 */
     private fun updateSelectedFrom(index: Int) {
-        listVariant.forEachIndexed { i, variant ->
+        listVariant.values.forEachIndexed { i, variant ->
             if(i > index) {
                 listSelected.remove(variant.title.key)
             }
@@ -203,7 +202,7 @@ object RecyclerData {
 */
     private fun updateNormalFrom(index: Int) {
         var once = true
-        listVariant.forEachIndexed { i, variant ->
+        listVariant.values.forEachIndexed { i, variant ->
             if(i >= index) {
                 if(once) {
                     if(variant.title.independent) return@forEachIndexed
@@ -256,7 +255,7 @@ object RecyclerData {
     }
 
     internal fun isSelected(): Boolean {
-        val groupSize = listVariant.filter { !it.title.independent }.size
+        val groupSize = listVariant.filter { !it.value.title.independent }.size
         val delimiterCount = getPQKey().split("+").size
         return groupSize == delimiterCount
     }
