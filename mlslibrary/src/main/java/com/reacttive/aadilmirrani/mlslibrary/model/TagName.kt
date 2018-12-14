@@ -5,4 +5,4 @@ import androidx.annotation.NonNull
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class TagName(@NonNull internal val key: String, @NonNull internal val title: String, @NonNull internal val selected: Boolean = false): Parcelable
+data class TagName(@NonNull val key: String, @NonNull val title: String, @NonNull val selected: Boolean = false): Parcelable

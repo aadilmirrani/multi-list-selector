@@ -6,4 +6,4 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class Variant(@NonNull internal val title: TagHeader, @NonNull internal val data: ArrayList<TagName>): Parcelable
+data class Variant(@NonNull val title: TagHeader, @NonNull val data: ArrayList<TagName>): Parcelable
