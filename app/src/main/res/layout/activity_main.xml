@@ -11,9 +11,23 @@
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:headerBottomPadding="10dip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_add_values"/>
+
+    <TextView
+            android:id="@+id/tv_add_values"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Add Values"
+            android:paddingBottom="10dip"
+            android:paddingTop="5dip"
+            android:background="#000"
+            android:textColor="#fff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/btn_add_values"/>
 
     <Button

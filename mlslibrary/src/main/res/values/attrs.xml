@@ -6,6 +6,8 @@
         <attr name="headerTextColor" format="color"/>
         <attr name="headerTextSize" format="dimension"/>
 
+        <attr name="headerBottomPadding" format="dimension"/>
+
         <attr name="tagNormalTextSize" format="dimension"/>
         <attr name="tagSelectedTextSize" format="dimension"/>
 

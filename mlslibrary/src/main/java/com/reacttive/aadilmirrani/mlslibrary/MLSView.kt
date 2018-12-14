@@ -24,6 +24,7 @@ class MLSView : LinearLayout {
 
     private val defaultHeaderTextColor = ContextCompat.getColor(context, R.color.header_text_color)
     private val defaultHeaderTextSize = resources.getDimension(R.dimen.header_text_size)
+    private val defaultHeaderBottomPadding = resources.getDimension(R.dimen.header_bottom_padding)
 
     private val defaultTagNormalColor = ContextCompat.getColor(context, R.color.tag_normal_color)
     private val defaultTagSelectedColor = ContextCompat.getColor(context, R.color.tag_selected_color)
@@ -38,10 +39,11 @@ class MLSView : LinearLayout {
     private val defaultTagNormalCornerRadius = resources.getDimension(R.dimen.tag_normal_corner_radius)
     private val defaultTagSelectedCornerRadius = resources.getDimension(R.dimen.tag_selected_corner_radius)
 
-    private var groupBotomPadding: Float? = null
+    private var groupBottomPadding: Float? = null
 
     private var headerTextColor: Int? = null
     private var headerTextSize: Float? = null
+    private var headerBottomPadding: Float? = null
 
     private var tagNormalColor: Int? = null
     private var tagSelectedColor: Int? = null
@@ -67,10 +69,11 @@ class MLSView : LinearLayout {
 
         val a = context.obtainStyledAttributes(attrs, R.styleable.MLSView, defStyle, R.style.MLSView)
         try {
-            groupBotomPadding = a.getDimension(R.styleable.MLSView_groupBottomPadding, defaultGroupBottomPadding)
+            groupBottomPadding = a.getDimension(R.styleable.MLSView_groupBottomPadding, defaultGroupBottomPadding)
 
             headerTextColor = a.getColor(R.styleable.MLSView_headerTextColor, defaultHeaderTextColor)
             headerTextSize = a.getDimension(R.styleable.MLSView_headerTextSize, defaultHeaderTextSize)
+            headerBottomPadding = a.getDimension(R.styleable.MLSView_headerBottomPadding, defaultHeaderBottomPadding)
 
             tagNormalColor = a.getColor(R.styleable.MLSView_tagNormalTextColor, defaultTagNormalColor)
             tagSelectedColor = a.getColor(R.styleable.MLSView_tagSelectedTextColor, defaultTagSelectedColor)
@@ -144,8 +147,8 @@ class MLSView : LinearLayout {
         RecyclerData.generateNormal()
 
         for(variant in listVariant) {
-            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize)
-            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding)
+            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerBottomPadding ?: defaultHeaderBottomPadding)
+            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
         }
         this.invalidate()
     }
@@ -161,8 +164,8 @@ class MLSView : LinearLayout {
             }
 
             RecyclerData.listVariant[variant.title.key] = variant
-            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize)
-            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBotomPadding ?: defaultGroupBottomPadding)
+            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerBottomPadding ?: defaultHeaderBottomPadding)
+            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
             RecyclerData.addIndependentGroup(variant)
             AppData.notifyDataSetChanged()
         }
