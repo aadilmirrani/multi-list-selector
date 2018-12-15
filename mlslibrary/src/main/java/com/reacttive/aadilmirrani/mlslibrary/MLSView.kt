@@ -104,19 +104,6 @@ class MLSView : LinearLayout {
         }
     }
 
-    override fun onViewAdded(child: View?) {
-        super.onViewAdded(child)
-/*
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(
-            ObjectAnimator.ofFloat(this, "translationY", 100f,0f),
-            ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
-        )
-        animatorSet.interpolator = DecelerateInterpolator(3.0f)
-        animatorSet.duration = 300
-*/
-    }
-
     fun clearAll() {
         if(this.childCount > 0) {
             AppData.tvList.clear()
@@ -168,6 +155,20 @@ class MLSView : LinearLayout {
             AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
             RecyclerData.addIndependentGroup(variant)
             AppData.notifyDataSetChanged()
+        }
+    }
+
+    fun removeIndependentGroup(key: String) {
+        if(RecyclerData.listVariant.containsKey(key)) {
+            if(RecyclerData.listVariant[key]?.title?.independent == true) {
+                this.removeView(AppData.tvList[key])
+                this.removeView(AppData.rvList[key])
+
+                AppData.tvList.remove(key)
+                AppData.tvList.remove(key)
+
+                AppData.notifyDataSetChanged()
+            }
         }
     }
 

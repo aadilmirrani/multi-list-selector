@@ -68,6 +68,10 @@ class MainActivity : AppCompatActivity(), OnTagSelectListener {
             recycler_view.addIndependentGroup( Variant(TagHeader("C", "Home", true), arrayListOf(TagName("c1", "Cup $counter"), TagName("c2", "Light"), TagName("c3", "Table"))))
         }
 
+        tv_add_values.setOnClickListener {
+            recycler_view.removeIndependentGroup("C")
+        }
+
     }
 
     override fun onTagSelect(index: Int, key: String, selected: Boolean, group: TagHeader, tag: TagName, mapIndependent: LinkedHashMap<String, String>) {}
