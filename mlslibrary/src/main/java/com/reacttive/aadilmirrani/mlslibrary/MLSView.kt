@@ -104,18 +104,17 @@ class MLSView : LinearLayout {
         }
     }
 
-    fun clearAll() {
-        if(this.childCount > 0) {
-            AppData.tvList.clear()
-            AppData.rvList.clear()
-            RecyclerData.delimiter = '0'
-            RecyclerData.listVariant.clear()
-            RecyclerData.listValue.clear()
-            RecyclerData.listNormal.clear()
-            RecyclerData.listSelected.clear()
-            RecyclerData.listIndependentSelected.clear()
-            this.removeAllViews()
-        }
+    private fun clearAll() {
+        AppData.tvList.clear()
+        AppData.rvList.clear()
+        RecyclerData.delimiter = '+'
+        RecyclerData.listVariant.clear()
+        RecyclerData.listValue.clear()
+        RecyclerData.listNormal.clear()
+        RecyclerData.listSelected.clear()
+        RecyclerData.listIndependentSelected.clear()
+        this.removeAllViews()
+        this.invalidate()
     }
 
     private fun clearValues() {
