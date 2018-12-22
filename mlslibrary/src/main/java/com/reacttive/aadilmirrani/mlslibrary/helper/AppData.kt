@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.reacttive.aadilmirrani.mlslibrary.listener.OnTagSelectListener
 
-object AppData {
+internal class AppData {
 
     internal val tvList = hashMapOf<String, TextView>()
     internal val rvList = hashMapOf<String, RecyclerView>()

@@ -15,8 +15,7 @@ import com.reacttive.aadilmirrani.mlslibrary.model.Variant
 import com.reacttive.aadilmirrani.mlslibrary.utils.setTagDrawable
 import kotlin.math.roundToInt
 
-
-class TagAdapter internal constructor(@NonNull private val variant: Variant, private val mlsTagStyle: MLSTagStyle?) : RecyclerView.Adapter<TagAdapter.MyViewHolder>() {
+class TagAdapter internal constructor(@NonNull private val appData: AppData, @NonNull private val recyclerData: RecyclerData, @NonNull private val variant: Variant, private val mlsTagStyle: MLSTagStyle?) : RecyclerView.Adapter<TagAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.tv_it_tag)
@@ -30,14 +29,14 @@ class TagAdapter internal constructor(@NonNull private val variant: Variant, pri
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val title = variant.data[position].title
-        RecyclerData.listNormal[variant.title.key]?.get(variant.data[position].key)?.let {
+        recyclerData.listNormal[variant.title.key]?.get(variant.data[position].key)?.let {
             if(mlsTagStyle != null) {
                 holder.title.setTagDrawable(mlsTagStyle.tagNormalColor, mlsTagStyle.tagNormalCornerRadius, mlsTagStyle.normalStrokeWidth.roundToInt())
                 holder.title.setTextColor(mlsTagStyle.tagNormalColor)
                 holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagNormalTextSize)
             }
-            if(AppData.tagTypeface != null) {
-                holder.title.typeface =  AppData.tagTypeface
+            if(appData.tagTypeface != null) {
+                holder.title.typeface =  appData.tagTypeface
             }
         } ?: kotlin.run {
             if(mlsTagStyle != null) {
@@ -45,32 +44,32 @@ class TagAdapter internal constructor(@NonNull private val variant: Variant, pri
                 holder.title.setTextColor(mlsTagStyle.tagDisabledColor)
                 holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagNormalTextSize)
             }
-            if(AppData.tagTypeface != null) {
-                holder.title.typeface =  AppData.tagTypeface
+            if(appData.tagTypeface != null) {
+                holder.title.typeface =  appData.tagTypeface
             }
         }
 
-        RecyclerData.listSelected[variant.title.key]?.let {
+        recyclerData.listSelected[variant.title.key]?.let {
             if(it == variant.data[position].key) {
                 if(mlsTagStyle != null) {
                     holder.title.setTagDrawable( mlsTagStyle.tagSelectedColor, mlsTagStyle.tagSelectedCornerRadius, mlsTagStyle.selectedStrokeWidth.roundToInt() )
                     holder.title.setTextColor(mlsTagStyle.tagSelectedColor)
                     holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagSelectedTextSize)
                 }
-                if(AppData.tagTypeface != null) {
-                    holder.title.typeface =  AppData.tagTypeface
+                if(appData.tagTypeface != null) {
+                    holder.title.typeface =  appData.tagTypeface
                 }
             }
         }
-        RecyclerData.listIndependentSelected[variant.title.key]?.let {
+        recyclerData.listIndependentSelected[variant.title.key]?.let {
             if(it == variant.data[position].key) {
                 if(mlsTagStyle != null) {
                     holder.title.setTagDrawable(mlsTagStyle.tagSelectedColor, mlsTagStyle.tagSelectedCornerRadius, mlsTagStyle.selectedStrokeWidth.roundToInt())
                     holder.title.setTextColor(mlsTagStyle.tagSelectedColor)
                     holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, mlsTagStyle.tagSelectedTextSize)
                 }
-                if(AppData.tagTypeface != null) {
-                    holder.title.typeface =  AppData.tagTypeface
+                if(appData.tagTypeface != null) {
+                    holder.title.typeface =  appData.tagTypeface
                 }
             }
         }

@@ -3,7 +3,6 @@ package com.reacttive.aadilmirrani.mlslibrary
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
@@ -14,11 +13,14 @@ import com.reacttive.aadilmirrani.mlslibrary.helper.addRecyclerView
 import com.reacttive.aadilmirrani.mlslibrary.listener.OnTagSelectListener
 import com.reacttive.aadilmirrani.mlslibrary.model.MLSTagStyle
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
+
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
 
 class MLSView : LinearLayout {
+    
+    private val appData = AppData()
+    private val recyclerData = RecyclerData(appData)
 
     private val defaultGroupBottomPadding = resources.getDimension(R.dimen.groupBottomPadding)
 
@@ -105,112 +107,114 @@ class MLSView : LinearLayout {
     }
 
     private fun clearAll() {
-        AppData.tvList.clear()
-        AppData.rvList.clear()
-        RecyclerData.delimiter = '+'
-        RecyclerData.listVariant.clear()
-        RecyclerData.listValue.clear()
-        RecyclerData.listNormal.clear()
-        RecyclerData.listSelected.clear()
-        RecyclerData.listIndependentSelected.clear()
+        appData.tvList.clear()
+        appData.rvList.clear()
+        recyclerData.delimiter = '+'
+        recyclerData.listVariant.clear()
+        recyclerData.listValue.clear()
+        recyclerData.listNormal.clear()
+        recyclerData.listSelected.clear()
+        recyclerData.listIndependentSelected.clear()
+        recyclerData.enableAll = false
+        recyclerData.preSelected = false
         this.removeAllViews()
         this.invalidate()
     }
 
     private fun clearValues() {
-        RecyclerData.listValue.clear()
-        RecyclerData.listNormal.clear()
-//        RecyclerData.listSelected.clear()
-//        RecyclerData.listIndependentSelected.clear()
+        recyclerData.listValue.clear()
+        recyclerData.listNormal.clear()
+//        recyclerData.listSelected.clear()
+//        recyclerData.listIndependentSelected.clear()
     }
 
     fun setData(@NonNull context: Context, @NonNull listVariant: ArrayList<Variant>, @NonNull listValue: HashMap<String, Int>, @NonNull delimiter: Char) {
 
         clearAll()
-        RecyclerData.delimiter = delimiter
-        RecyclerData.listVariant = listVariant.associateByTo(RecyclerData.listVariant, {it.title.key}, {it} )
-        RecyclerData.listValue = listValue
-        RecyclerData.generateNormal()
+        recyclerData.delimiter = delimiter
+        recyclerData.listVariant = listVariant.associateByTo(recyclerData.listVariant, {it.title.key}, {it} )
+        recyclerData.listValue = listValue
+        recyclerData.generateNormal()
 
         for(variant in listVariant) {
-            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerBottomPadding ?: defaultHeaderBottomPadding)
-            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
+            appData.tvList[variant.title.key] = this.addHeaderTextView(context, appData, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerBottomPadding ?: defaultHeaderBottomPadding)
+            appData.rvList[variant.title.key] = this.addRecyclerView(context, appData, recyclerData, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
         }
         this.invalidate()
     }
 
     fun addIndependentGroup(variant: Variant) {
         if(variant.title.independent) {
-            if(RecyclerData.listVariant.containsKey(variant.title.key)) {
-                this.removeView(AppData.tvList[variant.title.key])
-                this.removeView(AppData.rvList[variant.title.key])
+            if(recyclerData.listVariant.containsKey(variant.title.key)) {
+                this.removeView(appData.tvList[variant.title.key])
+                this.removeView(appData.rvList[variant.title.key])
 
-                AppData.tvList.remove(variant.title.key)
-                AppData.tvList.remove(variant.title.key)
+                appData.tvList.remove(variant.title.key)
+                appData.tvList.remove(variant.title.key)
             }
 
-            RecyclerData.listVariant[variant.title.key] = variant
-            AppData.tvList[variant.title.key] = this.addHeaderTextView(context, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerBottomPadding ?: defaultHeaderBottomPadding)
-            AppData.rvList[variant.title.key] = this.addRecyclerView(context, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
-            RecyclerData.addIndependentGroup(variant)
-            AppData.notifyDataSetChanged()
+            recyclerData.listVariant[variant.title.key] = variant
+            appData.tvList[variant.title.key] = this.addHeaderTextView(context, appData, variant.title, headerTextColor?: defaultHeaderTextColor, headerTextSize ?: defaultHeaderTextSize, headerBottomPadding ?: defaultHeaderBottomPadding)
+            appData.rvList[variant.title.key] = this.addRecyclerView(context, appData, recyclerData, mlsTagStyle, variant, groupBottomPadding ?: defaultGroupBottomPadding)
+            recyclerData.addIndependentGroup(variant)
+            appData.notifyDataSetChanged()
         }
     }
 
     fun removeIndependentGroup(key: String) {
-        if(RecyclerData.listVariant.containsKey(key)) {
-            if(RecyclerData.listVariant[key]?.title?.independent == true) {
-                this.removeView(AppData.tvList[key])
-                this.removeView(AppData.rvList[key])
+        if(recyclerData.listVariant.containsKey(key)) {
+            if(recyclerData.listVariant[key]?.title?.independent == true) {
+                this.removeView(appData.tvList[key])
+                this.removeView(appData.rvList[key])
 
-                AppData.tvList.remove(key)
-                AppData.tvList.remove(key)
+                appData.tvList.remove(key)
+                appData.tvList.remove(key)
 
-                AppData.notifyDataSetChanged()
+                appData.notifyDataSetChanged()
             }
         }
     }
 
     fun updateValues(@NonNull listValue: HashMap<String, Int>) : Boolean {
-        if(RecyclerData.enableAll) {
-            AppData.notifyDataSetChanged()
+        if(recyclerData.enableAll) {
+            appData.notifyDataSetChanged()
             return true
         }
         return if(listValue.size > 0) {
             clearValues()
-            RecyclerData.listValue = listValue
-            RecyclerData.generateUpdatedValues()
-            AppData.notifyDataSetChanged()
-            RecyclerData.listNormal.size > 0
+            recyclerData.listValue = listValue
+            recyclerData.generateUpdatedValues()
+            appData.notifyDataSetChanged()
+            recyclerData.listNormal.size > 0
         } else {
             false
         }
     }
 
     fun setOnTagSelectListener(l: OnTagSelectListener) {
-        AppData.mOnTagSelectListener = l
+        appData.mOnTagSelectListener = l
     }
 
     fun setHeaderTypeface(typeface: Typeface?) {
         typeface?.let { tf ->
-            AppData.headerTypeface = tf
-            AppData.tvList.forEach { it.value.typeface = tf }
+            appData.headerTypeface = tf
+            appData.tvList.forEach { it.value.typeface = tf }
         }
     }
 
     fun setTagTypeface(typeface: Typeface?) {
         typeface?.let { tf ->
-            AppData.tagTypeface = tf
-            AppData.notifyDataSetChanged()
+            appData.tagTypeface = tf
+            appData.notifyDataSetChanged()
         }
     }
 
     fun enableAll(@NonNull b: Boolean) {
-        RecyclerData.enableAll = b
+        recyclerData.enableAll = b
     }
 
     fun enablePreSelect(@NonNull b: Boolean) {
-        RecyclerData.preSelected = b
+        recyclerData.preSelected = b
     }
 
     @Deprecated(
@@ -219,12 +223,12 @@ class MLSView : LinearLayout {
         replaceWith = ReplaceWith(
             "",
             ""
-//            "RecyclerData.hideDisabled = b",
-//            "com.reacttive.aadilmirrani.mlslibrary.helper.RecyclerData"
+//            "recyclerData.hideDisabled = b",
+//            "com.reacttive.aadilmirrani.mlslibrary.helper.recyclerData"
         )
     )
     fun hideDisabledTag(@NonNull b: Boolean) {
-//        RecyclerData.hideDisabled = b
+//        recyclerData.hideDisabled = b
     }
 /*
     private fun Float.dp2px(): Float {

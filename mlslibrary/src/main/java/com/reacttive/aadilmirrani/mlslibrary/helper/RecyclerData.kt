@@ -1,10 +1,11 @@
 package com.reacttive.aadilmirrani.mlslibrary.helper
 
+import androidx.annotation.NonNull
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
 
 
 
-object RecyclerData {
+class RecyclerData internal constructor(@NonNull private val appData: AppData) {
 
     internal val listNormal = hashMapOf<String, LinkedHashMap<String, Int>>()
     internal val listSelected = linkedMapOf<String, String>()
@@ -156,7 +157,7 @@ object RecyclerData {
                 }
             }
         }
-        AppData.notifyDataSetChanged()
+        appData.notifyDataSetChanged()
     }
 
     fun updateData(group: Variant, item: String) {

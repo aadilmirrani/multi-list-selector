@@ -15,8 +15,7 @@ import com.reacttive.aadilmirrani.mlslibrary.listener.RecyclerTouchListener
 import com.reacttive.aadilmirrani.mlslibrary.model.MLSTagStyle
 import com.reacttive.aadilmirrani.mlslibrary.model.Variant
 
-
-internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle: MLSTagStyle?, @NonNull variant: Variant, @NonNull groupBottomPadding: Float): RecyclerView {
+internal fun LinearLayout.addRecyclerView(@NonNull context: Context, @NonNull appData: AppData, @NonNull recyclerData: RecyclerData, mlsTagStyle: MLSTagStyle?, @NonNull variant: Variant, @NonNull groupBottomPadding: Float): RecyclerView {
 
     val paddingPx =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, groupBottomPadding, context.resources.displayMetrics)
@@ -29,7 +28,7 @@ internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle
 
     val recyclerView = RecyclerView(context)
 
-    val adapter = TagAdapter(variant, mlsTagStyle)
+    val adapter = TagAdapter(appData, recyclerData, variant, mlsTagStyle)
 
     recyclerView.layoutManager = flexboxLayoutManager
     recyclerView.setHasFixedSize(true)
@@ -39,30 +38,30 @@ internal fun LinearLayout.addRecyclerView(@NonNull context: Context, mlsTagStyle
     recyclerView.addOnItemTouchListener(RecyclerTouchListener(context, recyclerView,
         object : RecyclerTouchListener.ClickListener {
             override fun onClick(view: View, position: Int) {
-                RecyclerData.listNormal[variant.title.key]?.get(variant.data[position].key)?.let {
-                    //                    RecyclerData.updateSelectedData(variant.title.key, variant.data[position].key)
-//                    if(!RecyclerData.enableAll) RecyclerData.updateNormalList(variant.title.key)
-                    if (RecyclerData.listSelected[variant.title.key]?.equals(variant.data[position].key) == true ||
-                        RecyclerData.listIndependentSelected[variant.title.key]?.equals(variant.data[position].key) == true
+                recyclerData.listNormal[variant.title.key]?.get(variant.data[position].key)?.let {
+                    //                    recyclerData.updateSelectedData(variant.title.key, variant.data[position].key)
+//                    if(!recyclerData.enableAll) recyclerData.updateNormalList(variant.title.key)
+                    if (recyclerData.listSelected[variant.title.key]?.equals(variant.data[position].key) == true ||
+                        recyclerData.listIndependentSelected[variant.title.key]?.equals(variant.data[position].key) == true
                     ) {
-                        AppData.mOnTagSelectListener?.onTagSelect(
+                        appData.mOnTagSelectListener?.onTagSelect(
                             position,
-                            RecyclerData.getPQKey(),
-                            RecyclerData.isSelected(),
+                            recyclerData.getPQKey(),
+                            recyclerData.isSelected(),
                             variant.title,
                             variant.data[position],
-                            RecyclerData.listIndependentSelected
+                            recyclerData.listIndependentSelected
                         )
                     } else {
-                        RecyclerData.updateData(variant, variant.data[position].key)
-                        AppData.notifyDataSetChanged()
-                        AppData.mOnTagSelectListener?.onTagSelect(
+                        recyclerData.updateData(variant, variant.data[position].key)
+                        appData.notifyDataSetChanged()
+                        appData.mOnTagSelectListener?.onTagSelect(
                             position,
-                            RecyclerData.getPQKey(),
-                            RecyclerData.isSelected(),
+                            recyclerData.getPQKey(),
+                            recyclerData.isSelected(),
                             variant.title,
                             variant.data[position],
-                            RecyclerData.listIndependentSelected
+                            recyclerData.listIndependentSelected
                         )
                     }
                 }

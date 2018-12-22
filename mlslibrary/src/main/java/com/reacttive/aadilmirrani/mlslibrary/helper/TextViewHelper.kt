@@ -8,12 +8,12 @@ import androidx.annotation.NonNull
 import com.reacttive.aadilmirrani.mlslibrary.model.TagHeader
 import kotlin.math.roundToInt
 
-internal fun LinearLayout.addHeaderTextView(@NonNull context: Context, @NonNull header: TagHeader, @NonNull txtColor: Int, @NonNull txtSize: Float, @NonNull headerBottomPadding: Float): TextView {
+internal fun LinearLayout.addHeaderTextView(@NonNull context: Context, @NonNull appData: AppData, @NonNull header: TagHeader, @NonNull txtColor: Int, @NonNull txtSize: Float, @NonNull headerBottomPadding: Float): TextView {
     val textView = TextView(context)
 
     textView.setTextColor(txtColor)
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, txtSize)
-    AppData.headerTypeface?.let { textView.typeface = it }
+    appData.headerTypeface?.let { textView.typeface = it }
 
     textView.text = header.title
 
